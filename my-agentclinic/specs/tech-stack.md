@@ -30,6 +30,18 @@ than this project needs). We chose Hono for its clarity and TS ergonomics.
   build step in the early phases — this keeps things simple and satisfies the
   "works well in a modern browser" requirement.
 
+## Styling — Pico CSS
+
+- **[Pico CSS](https://picocss.com/)** is the base stylesheet — a minimal,
+  *classless* framework that styles semantic HTML (`<nav>`, `<article>`,
+  `<table>`, headings, links) directly, with almost no class markup. This keeps
+  the server-rendered JSX clean and the site attractive in a modern browser with
+  little effort — a good fit for course students and quick booth demos.
+- Loaded from the **classless CDN build** via a `<link>` in the layout `<head>`.
+  No npm dependency and no build step, in keeping with "reliable over clever."
+- A single **`static/style.css`** is kept for small, project-specific overrides
+  (clinic accent color, spacing), layered *after* Pico so overrides win.
+
 ## Build & tooling
 
 - **`tsc`** for type-checking and compilation to `dist/`.
