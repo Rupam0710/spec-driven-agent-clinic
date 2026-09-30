@@ -54,3 +54,7 @@ app.get("/therapies/:id", (c) => {
   }
   return c.html(<TherapyDetail therapy={therapy} />);
 });
+
+// Any unmatched path gets the friendly, on-brand 404 page (not Hono's default
+// plain-text response), so misses are consistent across the whole app.
+app.notFound((c) => c.html(<NotFound />, 404));

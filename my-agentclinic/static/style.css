@@ -4,12 +4,21 @@
  * clinic's own accent and spacing tweaks live here.
  */
 
-:root {
-  /* Clinic teal accent, replacing Pico's default primary. */
-  --pico-primary: #2a9d8f;
-  --pico-primary-background: #2a9d8f;
-  --pico-primary-hover: #248277;
-  --pico-primary-hover-background: #248277;
+/*
+ * Clinic teal accent, replacing Pico's default primary. Pico v2 declares these
+ * variables under `:root:not([data-theme=dark]), [data-theme=light]`, so we
+ * must match that selector's specificity (a bare `:root` would lose to it and
+ * the override would silently not apply). The teal is darkened to #1f6f66
+ * (~5.9:1 on white) so link/button text clears WCAG AA (4.5:1).
+ */
+:root:not([data-theme="dark"]),
+[data-theme="light"] {
+  --pico-primary: #1f6f66;
+  --pico-primary-background: #1f6f66;
+  --pico-primary-hover: #185952;
+  --pico-primary-hover-background: #185952;
+  --pico-primary-underline: rgba(31, 111, 102, 0.5);
+  --pico-primary-focus: rgba(31, 111, 102, 0.25);
 }
 
 /* A touch of breathing room between stacked entity cards on list pages. */

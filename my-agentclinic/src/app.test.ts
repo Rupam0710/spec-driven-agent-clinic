@@ -86,3 +86,12 @@ describe("Therapies", () => {
     expect(res.status).toBe(404);
   });
 });
+
+describe("Unmatched paths", () => {
+  it("returns the friendly 404 page for a completely unknown path", async () => {
+    const res = await app.request("/nonsense");
+    expect(res.status).toBe(404);
+    const body = await res.text();
+    expect(body).toContain("Nothing here to treat");
+  });
+});
