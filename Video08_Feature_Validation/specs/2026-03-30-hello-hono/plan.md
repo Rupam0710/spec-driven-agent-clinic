@@ -32,8 +32,16 @@
 16. Serve the `static/` directory via `@hono/node-server/serve-static` in `src/index.tsx`
 17. Update `src/pages/Home.tsx` to use `<Layout>` and place page content inside `<Main>`
 
-## Group 6 — Verify
+## Group 6 — Tests (Vitest)
 
-18. Run `npm run typecheck` — must exit 0 with no errors
-19. Run `npm run dev` and confirm `curl localhost:3000` returns HTML containing the heading
-20. Confirm `curl localhost:3000/static/style.css` returns the CSS file
+18. Add `vitest` as a dev dependency
+19. Add `"test": "vitest run"` and `"test:watch": "vitest"` to `package.json` scripts
+20. Add `vitest.config.ts` mirroring the Hono JSX settings (`jsx: "automatic"`, `jsxImportSource: "hono/jsx"`)
+21. Export the Hono `app` from `src/index.tsx` and skip `serve()` when `NODE_ENV === "test"` so tests can import it
+22. Add `src/index.test.tsx` asserting `GET /` returns `200`, HTML content type, an `<h1>AgentClinic`, and a tagline
+
+## Group 7 — Verify
+
+23. Run `npm run typecheck` — must exit 0 with no errors
+24. Run `npm test` — the Vitest suite must pass (exit 0)
+25. Run `npm run dev` and confirm `curl localhost:3000/static/style.css` returns the CSS file

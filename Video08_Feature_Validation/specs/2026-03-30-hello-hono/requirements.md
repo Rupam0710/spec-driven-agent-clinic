@@ -7,9 +7,12 @@ Install and configure Hono with a `tsx` dev server. Expose a single `/` route th
 ## Out of Scope
 
 - No shared layout or navigation (Phase 2)
-- No test framework setup (Vitest deferred to a later phase)
 - No database or additional routes
 - No CI/CD pipeline
+
+## Validation
+
+Validation for every phase — including this one — is automated with **Vitest**, run via `npm test`. This phase must ship with a Vitest test that asserts the `/` route returns `200` and renders the home page. See `validation.md` for the full Definition of Done.
 
 ## Decisions
 

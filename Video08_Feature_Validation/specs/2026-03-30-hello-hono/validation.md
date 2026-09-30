@@ -20,16 +20,20 @@ npm run dev
 
 Must start without errors. The terminal should show the server is listening (port 3000 or logged port).
 
-### 3. Route returns an HTML home page
+### 3. Automated tests pass (Vitest)
 
 ```
-curl -s http://localhost:3000
+npm test
 ```
 
-HTTP status must be `200 OK`. Response body must be HTML and must contain:
+Must exit with code 0. The Vitest suite is the source of truth for validation and asserts that the `/` route:
 
-- An `<h1>` element with the text `AgentClinic`
-- A tagline (any short descriptive text; exact wording is implementation choice)
+- Responds with HTTP status `200 OK`
+- Returns an HTML response (`content-type: text/html`)
+- Contains an `<h1>` element with the text `AgentClinic`
+- Contains a tagline (any short descriptive text; exact wording is implementation choice)
+
+Tests import the exported Hono `app` and use `app.request()`, so no live server or port is needed.
 
 ### 4. Hono version is pinned
 
@@ -41,6 +45,5 @@ HTTP status must be `200 OK`. Response body must be HTML and must contain:
 
 ## Not Required
 
-- No automated tests needed for this phase
-- No CI pipeline required
-- Browser rendering not checked (curl is sufficient)
+- No CI pipeline required (running `npm test` locally is sufficient for now)
+- Browser rendering not checked (the Vitest route assertion is sufficient)

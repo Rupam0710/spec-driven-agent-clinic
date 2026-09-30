@@ -26,9 +26,13 @@ AgentClinic is a server-side TypeScript application. All rendering happens on th
 - **SQLite** (via `better-sqlite3`) for local development and early production — simple, embedded, no infrastructure
 - Migrations via plain SQL files; no ORM to start
 
-## Testing
+## Testing & Validation
 
 - **Vitest** — fast, TypeScript-native, compatible with the rest of the stack
+- Vitest is our validation mechanism: each feature phase is considered validated when its Vitest suite passes
+- Tests are run through a dedicated `test` script in `package.json`, so validation is a single command (`npm test`) locally and in CI
+  - `"test": "vitest run"` for one-off/CI runs
+  - `"test:watch": "vitest"` for iterative development
 
 ## Tooling
 
