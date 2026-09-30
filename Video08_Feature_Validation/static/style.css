@@ -1,5 +1,15 @@
+/* Mobile-first, responsive base styles.
+   Base rules target small screens; min-width media queries enhance for
+   larger viewports. Layout uses relative units so it stays fluid. */
+
 *, *::before, *::after {
   box-sizing: border-box;
+}
+
+html {
+  /* Slightly smaller base on small screens; scales up below. */
+  font-size: 100%;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -10,8 +20,14 @@ body {
   background: #fff;
 }
 
+/* Media stays within its container on narrow screens. */
+img, video, canvas, svg {
+  max-width: 100%;
+  height: auto;
+}
+
 header {
-  padding: 1rem 2rem;
+  padding: 1rem;
   border-bottom: 1px solid #e5e5e5;
 }
 
@@ -22,14 +38,31 @@ header a {
 }
 
 main {
-  padding: 2rem;
+  padding: 1rem;
   max-width: 60rem;
   margin-inline: auto;
 }
 
 footer {
-  padding: 1rem 2rem;
+  padding: 1rem;
   border-top: 1px solid #e5e5e5;
   font-size: 0.875rem;
   color: #666;
+}
+
+/* Tablet and up: roomier gutters and slightly larger type. */
+@media (min-width: 40rem) {
+  html {
+    font-size: 112.5%;
+  }
+
+  header,
+  main,
+  footer {
+    padding-inline: 2rem;
+  }
+
+  main {
+    padding-block: 2rem;
+  }
 }

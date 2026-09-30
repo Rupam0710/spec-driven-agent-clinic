@@ -2,6 +2,8 @@
 
 Phases are intentionally small — each one is a shippable slice of work, independently reviewable and testable.
 
+**Cross-cutting expectation:** every phase that ships UI must be **responsive** (mobile-first, works from small phones to large desktops). This is not a single phase — it applies to all UI work from Phase 1 onward. See `tech-stack.md` → Responsive Design.
+
 ---
 
 ## Phase 1 — Hello Hono ✅
@@ -11,7 +13,7 @@ Phases are intentionally small — each one is a shippable slice of work, indepe
 
 ## Phase 2 — Base Layout
 - Server-side JSX layout component (header, nav, main, footer)
-- Basic CSS (custom properties, reset, typography)
+- Basic CSS (custom properties, reset, typography), mobile-first and responsive
 - All routes render inside the shared layout
 
 ## Phase 3 — Agent List
@@ -44,7 +46,7 @@ Phases are intentionally small — each one is a shippable slice of work, indepe
 - Mary's dashboard is now real
 
 ## Phase 9 — Polish & Accessibility
-- Responsive layout for Steve's modern-browser requirement
+- Responsive refinements and cross-device QA (responsive is already baseline from Phase 1)
 - Semantic HTML audit
 - Keyboard navigation and focus styles
 

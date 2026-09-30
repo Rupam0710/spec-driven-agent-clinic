@@ -43,6 +43,13 @@ Tests import the exported Hono `app` and use `app.request()`, so no live server 
 
 `tsconfig.json` must contain `"strict": true`.
 
+### 6. UI is responsive
+
+- The home page HTML must include `<meta name="viewport" content="width=device-width, initial-scale=1.0" />`
+- `static/style.css` must be mobile-first: use relative units and a fluid `max-width`, and include at least one `@media (min-width: …)` query for larger viewports
+
+Both are asserted by the Vitest suite.
+
 ## Not Required
 
 - No CI pipeline required (running `npm test` locally is sufficient for now)

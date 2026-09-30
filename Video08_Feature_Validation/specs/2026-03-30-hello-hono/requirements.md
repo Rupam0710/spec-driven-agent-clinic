@@ -22,6 +22,9 @@ Record the exact Hono version in `package.json` with no range prefix (e.g., `"ho
 ### Enforce strict TypeScript
 `tsconfig.json` must include `"strict": true`. This is non-negotiable from the first commit so the codebase never accumulates loose types.
 
+### Responsive by default
+The rendered HTML must be responsive from the first page. The shared `Layout` includes a `<meta name="viewport" content="width=device-width, initial-scale=1.0" />` tag, and `static/style.css` is mobile-first (relative units, fluid `max-width`, at least one `min-width` media query). Responsive design is a product-wide baseline, not a later phase — see `../mission.md` and `../tech-stack.md`.
+
 ## Context
 
 This phase exists to prove the baseline works: Node runs TypeScript, Hono serves a response, and the dev loop is functional. Nothing more.
@@ -33,4 +36,4 @@ This is the first visible page a developer sees when they clone and run the proj
 ## Stakeholder Notes
 
 - **Mary** needs TypeScript end-to-end (satisfied by `strict: true` + successful `tsc --noEmit`)
-- **Steve** has no requirements yet; this phase is plumbing only
+- **Steve** wants an attractive site that works on any device; satisfied here by the viewport meta tag and mobile-first responsive base CSS

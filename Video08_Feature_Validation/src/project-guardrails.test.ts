@@ -12,6 +12,10 @@ function readJson(relPath: string): Record<string, any> {
   return JSON.parse(readFileSync(resolve(projectRoot, relPath), "utf8"));
 }
 
+function readText(relPath: string): string {
+  return readFileSync(resolve(projectRoot, relPath), "utf8");
+}
+
 describe("Hono version is pinned", () => {
   it("lists hono without a ^ or ~ range prefix", () => {
     const pkg = readJson("package.json");
@@ -25,5 +29,17 @@ describe("Strict TypeScript is enabled", () => {
   it("sets compilerOptions.strict to true in tsconfig.json", () => {
     const tsconfig = readJson("tsconfig.json");
     expect(tsconfig.compilerOptions?.strict).toBe(true);
+  });
+});
+
+describe("Stylesheet is mobile-first and responsive", () => {
+  const css = readText("static/style.css");
+
+  it("includes at least one min-width media query", () => {
+    expect(css).toMatch(/@media\s*\(min-width:/);
+  });
+
+  it("uses a fluid max-width rather than fixed pixel widths for layout", () => {
+    expect(css).toMatch(/max-width:\s*\d+(\.\d+)?rem/);
   });
 });

@@ -38,6 +38,14 @@ describe("GET /", () => {
     // Header links back to home.
     expect(body).toContain('<a href="/">AgentClinic</a>');
   });
+
+  it("is responsive: includes the viewport meta tag", async () => {
+    const res = await app.request("/");
+    const body = await res.text();
+    expect(body).toMatch(
+      /<meta\s+name="viewport"\s+content="width=device-width,\s*initial-scale=1(\.0)?"/,
+    );
+  });
 });
 
 describe("static assets", () => {
