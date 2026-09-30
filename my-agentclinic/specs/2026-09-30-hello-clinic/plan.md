@@ -20,33 +20,50 @@ phase ends with the app running in a browser and saying hello.
 
 ## 3. Home page (minimal)
 
-3.1. Create a minimal, server-rendered `HomePage` component (Hono JSX) — content
-     only, no styling (styling is Phase 2).
-3.2. Render a valid HTML document: a `<title>` of **"AgentClinic"** and an `<h1>`
-     of **"AgentClinic"** as the visible heading.
+3.1. Create a minimal, server-rendered `Home` page component (Hono JSX) that
+     supplies the page content; the HTML document shell comes from the layout
+     (group 4).
+3.2. Render an `<h1>` of **"AgentClinic"** as the visible heading (the document
+     `<title>` of **"AgentClinic"** lives in the layout).
 3.3. Add a one-line, on-brand welcome tagline (metaphor-forward, warm/playful)
      beneath the heading — e.g. a short "wellness clinic for AI agents" line.
 3.4. Wire `GET /` (task 2.2) to render this component.
 
-## 4. Scripts
+## 4. Layout component & base styling
 
-4.1. `dev` — `tsx watch src/index.ts` for a fast local loop.
-4.2. `start` — run the server (`tsx src/index.ts`, or `node dist/index.js` after
+4.1. Create a top-level `Layout` component (`src/components/Layout.tsx`) that
+     renders the HTML document shell (`<html>`/`<head>`/`<body>`) and composes
+     three subcomponents — `<Header>`, `<Main>`, `<Footer>` — with page content
+     passed as `children` into `<Main>`.
+4.2. Create each subcomponent in its own file:
+     `src/components/Header.tsx` (brand link home), `src/components/Main.tsx`
+     (wraps `children`), and `src/components/Footer.tsx` (copyright line).
+4.3. Create `static/style.css` with minimal base styles for the
+     header/main/footer regions; link it from the layout `<head>` via
+     `<link rel="stylesheet" href="/static/style.css" />`.
+4.4. Serve the `static/` directory through `@hono/node-server/serve-static`
+     (registered on the exported `app`), so `GET /static/style.css` resolves.
+4.5. Update `Home` (task 3.1) to render its content inside `<Layout>`.
+
+## 6. Scripts
+
+6.1. `dev` — `tsx watch src/index.ts` for a fast local loop.
+6.2. `start` — run the server (`tsx src/index.ts`, or `node dist/index.js` after
      build).
-4.3. `build` — `tsc` to `dist/` (already present; confirm it compiles the new
+6.3. `build` — `tsc` to `dist/` (already present; confirm it compiles the new
      source).
-4.4. Confirm dev → browser → build all work end to end.
+6.4. Confirm dev → browser → build all work end to end.
 
-## 5. Smoke test
+## 7. Smoke test
 
-5.1. Add a small automated test that calls `app.request('/')` and asserts HTTP
+7.1. Add a small automated test that calls `app.request('/')` and asserts HTTP
      200 with body containing "AgentClinic", plus `app.request('/health')`
      returns `{ status: "ok" }`.
-5.2. Wire an `npm test` script to run it.
+7.2. Wire an `npm test` script to run it.
 
-## 6. Verify & wrap up
+## 8. Verify & wrap up
 
-6.1. Run through `validation.md` end to end (type-check, build, run, browser,
+8.1. Run through `validation.md` end to end (type-check, build, run, browser,
      smoke test).
-6.2. Update `README.md` with how to run the app (dev/start/build/test).
-6.3. Commit on the `phase-1-hello-clinic` branch; open a PR when green.
+8.2. Update `README.md` with how to run the app (dev/start/build/test).
+8.3. Commit on the `phase-1-hello-clinic` branch; open a PR when green.

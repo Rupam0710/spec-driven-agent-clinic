@@ -13,14 +13,17 @@ In scope:
 - Stand up a **Hono** server on Node that starts cleanly and responds.
 - One route **`GET /`** returns a **minimal, server-rendered home page** — a
   valid HTML document with a `<title>` and `<h1>` of **"AgentClinic"** plus a
-  short, on-brand welcome tagline. Content only; no styling (styling is Phase 2).
+  short, on-brand welcome tagline.
+- A **shared page layout** with a **header**, **main**, and **footer**, plus a
+  linked **CSS file** for minimal base styling (see Decisions for file layout).
 - One route **`GET /health`** returns JSON `{ "status": "ok" }` for liveness
   checks in demos and tests.
 - Working **dev** and **run/build** scripts, end to end.
 
 Out of scope (deferred to later phases):
 
-- Shared layout, branding, and styling (Phase 2).
+- Rich branding, theming, and page-specific styling beyond the minimal base
+  stylesheet (later phases).
 - Any domain models — agents, ailments, therapies, appointments (Phase 3+).
 - Persistence / SQLite (introduced later, once data shape is stable).
 - Auth, billing, multi-tenancy (non-goals for now).
@@ -30,6 +33,14 @@ Out of scope (deferred to later phases):
 - **Framework:** Hono, per `specs/tech-stack.md` (TypeScript-first, lightweight).
 - **Rendering:** Hono's **JSX** for server-rendered HTML — no separate front-end
   build step.
+- **Layout structure:** a top-level `Layout` component composes the page shell
+  from three subcomponents — **`Header`**, **`Main`**, and **`Footer`** — and
+  **each lives in its own file** (`src/components/Header.tsx`,
+  `src/components/Main.tsx`, `src/components/Footer.tsx`, with the shell in
+  `src/components/Layout.tsx`). One component per file keeps them small and
+  independently editable.
+- **Styling:** a single `static/style.css`, served as a static asset and linked
+  from the layout `<head>`; kept minimal (base styles only).
 - **Runtime/serving:** Node via `@hono/node-server`.
 - **Dev loop:** `tsx` watch for fast iteration; `tsc` for type-check + build to
   `dist/`.

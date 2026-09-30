@@ -4,13 +4,13 @@ High-level implementation order, in **very small phases**. We build a *walking
 skeleton* first — a bare app that runs — then add one thin capability per phase.
 Each phase leaves the app in a working, shippable state.
 
-## Phase 1 — Hello, clinic (walking skeleton)
+## Phase 1 — Hello, clinic (walking skeleton) ✅
 
 - Add Hono; stand up a server that starts and responds.
 - One route (`/`) returns a simple server-rendered HTML page: "AgentClinic".
 - Dev/run scripts working end to end.
 
-_Goal: the app runs in a browser and says hello._
+_Goal: the app runs in a browser and says hello._ **Done.**
 
 ## Phase 2 — Layout & shell
 
