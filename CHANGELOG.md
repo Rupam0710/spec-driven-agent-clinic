@@ -2,9 +2,10 @@
 
 All notable changes to this project, grouped by date. Newest first.
 
-<!-- changelog-cursor: e11d25f2693286191bc1559fdf5eaf029a59e9e5 -->
+<!-- changelog-cursor: fe6ddba1a6d5db7ea9c7c10f044b5b8ec7bb8ce9 -->
 
 ## 2026-09-30
+- Apply Phase 2 review polish: teal accent, doctype, global 404 (`fe6ddba`)
 - Implement Phase 2: agents, ailments & therapies with Pico CSS (`e11d25f`)
 - Add Phase 2 feature spec (agents, ailments, therapies) with Pico CSS (`eadd337`)
 - Add changelog and changelog skill (`07f9482`)
