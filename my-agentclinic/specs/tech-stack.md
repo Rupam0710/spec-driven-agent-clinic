@@ -54,6 +54,11 @@ than this project needs). We chose Hono for its clarity and TS ergonomics.
   students and quick conference-booth demos.
 - Introduced once the shape of the data is stable; the early "walking skeleton"
   phases can run before storage is wired in.
+- **Status (post-MVP):** the data shape is now stable — agents, ailments,
+  therapies, and appointments are all modeled and shipped. That trigger condition
+  is therefore **met**, and since booked appointments currently reset on every
+  restart, wiring up SQLite is the **recommended next step** (ahead of the
+  dashboard and the design-polish pass).
 
 ## Constraints
 

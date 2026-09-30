@@ -64,6 +64,50 @@ Out of scope (deferred):
 - **Rendering / styling:** Hono JSX on the existing `Layout`; Pico CSS styles the
   `<form>`, `<select>`, and list markup for free (semantic HTML, no extra CSS).
 
+## Clarifications (post-implementation review)
+
+Building the MVP surfaced ambiguities the original spec left open. Resolved here;
+each notes whether it is **already reflected in the code** or a **follow-up**.
+
+1. **"Upcoming" list semantics** *(reflected in code).* For the MVP, "upcoming"
+   means **all booked appointments, sorted by slot start soonest-first** — there
+   is deliberately **no past/future filtering**. This is a conscious trade-off:
+   slots are a fixed demo set (see decision above), so a real `startsAt >= now`
+   filter would either be meaningless or make tests non-deterministic. When slots
+   become dynamic/persisted (post-MVP), revisit true "upcoming" filtering.
+
+2. **Slot capacity / double-booking** *(reflected in code).* A slot has **no
+   capacity limit**: it may be booked any number of times, including the same
+   agent booking the same slot twice, and multiple agents sharing a slot. No
+   conflict detection in the MVP. Capacity, per-slot availability, and
+   double-booking rules are **post-MVP**.
+
+3. **"Any agent + any therapy" vs the metaphor** *(reflected in code — accepted).*
+   The booking form intentionally does **not** constrain therapies to the
+   selected agent's diagnosed ailments, so an agent can book a therapy unrelated
+   to their ailments. This knowingly relaxes the agent→ailment→therapy metaphor
+   from `mission.md` in favor of a simpler MVP. Constraining the therapy list to
+   the agent's ailments is a candidate **post-MVP** enhancement.
+
+4. **Persistence trigger is now met** *(follow-up — see tech-stack/roadmap).*
+   With agents, ailments, therapies, and appointments all modeled, the data shape
+   is stable — the condition `tech-stack.md` sets for introducing SQLite. Because
+   appointments now reset on every restart (a newly visible limitation),
+   **persistence is the recommended next post-MVP phase**, ahead of the dashboard
+   and the polish pass. Recorded in `tech-stack.md` and `roadmap.md`.
+
+5. **Booking confirmation feedback** *(follow-up — NOT yet implemented).* Today a
+   successful `POST` 303-redirects to `/appointments` with no success message.
+   Recommendation: redirect to `/appointments?booked=1` and render a small
+   confirmation banner when that query param is present (no session/flash state
+   needed). Small, on-brand UX win; scheduled as a near-term follow-up.
+
+6. **No appointment detail page** *(reflected in code — accepted).* Unlike the
+   other entities, appointments have a list but no `/appointments/:id` detail
+   page. This is intentional for the MVP (an appointment is a booking, not a
+   browseable catalog entry). A detail page — likely paired with cancel/reschedule
+   — is a **post-MVP** candidate.
+
 ## Context & constraints
 
 - Keep it **small, legible, and demo-friendly** — teaching project + conference
