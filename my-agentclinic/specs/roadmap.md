@@ -12,7 +12,7 @@ Each phase leaves the app in a working, shippable state.
 
 _Goal: the app runs in a browser and says hello._ **Done.**
 
-## Phase 2 — Layout, agents, ailments & therapies
+## Phase 2 — Layout, agents, ailments & therapies ✅
 
 - Shared HTML layout (header, footer, clinic branding), server-rendered, with
   basic styling so the site looks intentional in a modern browser.
@@ -26,12 +26,13 @@ _Goal: the app runs in a browser and says hello._ **Done.**
 _Goal: a consistent shell where you can see agents, their diagnosed ailments,
 and the therapy that treats each ailment._
 
-## Phase 3 — Appointments (booking)
+## Phase 3 — Appointments (booking) ✅
 
 - Model an **appointment**.
 - Book an appointment (agent + therapy + time); list upcoming appointments.
 
-_Goal: agents can book their way to relief._
+_Goal: agents can book their way to relief._ **Done — this completes the MVP.**
+Appointments are held in memory (reset on restart); real persistence is below.
 
 ## Later (beyond MVP)
 

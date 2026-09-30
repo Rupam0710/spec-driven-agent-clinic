@@ -95,3 +95,56 @@ describe("Unmatched paths", () => {
     expect(body).toContain("Nothing here to treat");
   });
 });
+
+// The appointment store is module-level and shared across these tests, so the
+// order matters: the empty-state and invalid-booking cases run before the one
+// successful booking is created.
+describe("Appointments", () => {
+  const post = (fields: Record<string, string>) =>
+    app.request("/appointments", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams(fields).toString(),
+    });
+
+  it("GET /appointments/new renders the form with agent/therapy/slot options", async () => {
+    const res = await app.request("/appointments/new");
+    expect(res.status).toBe(200);
+    const body = await res.text();
+    expect(body).toContain('action="/appointments"');
+    expect(body).toContain("Claude"); // an agent option
+    expect(body).toContain("Rubber Duck Sessions"); // a therapy option
+    expect(body).toContain("Monday, 09:00"); // a slot option
+  });
+
+  it("GET /appointments shows the empty state before any booking", async () => {
+    const res = await app.request("/appointments");
+    expect(res.status).toBe(200);
+    expect(await res.text()).toContain("No appointments booked yet");
+  });
+
+  it("rejects an invalid booking (missing therapy) with 400 and adds nothing", async () => {
+    const res = await post({ agentId: "claude", therapyId: "", slotId: "mon-am" });
+    expect(res.status).toBe(400);
+    expect(await res.text()).toContain("Please choose an agent, a therapy, and a time slot.");
+
+    const list = await app.request("/appointments");
+    expect(await list.text()).toContain("No appointments booked yet");
+  });
+
+  it("books a valid appointment (303 redirect) and shows it in the list", async () => {
+    const res = await post({
+      agentId: "claude",
+      therapyId: "rubber-duck-sessions",
+      slotId: "mon-am",
+    });
+    expect(res.status).toBe(303);
+    expect(res.headers.get("location")).toBe("/appointments");
+
+    const list = await app.request("/appointments");
+    const body = await list.text();
+    expect(body).toContain("Monday, 09:00");
+    expect(body).toContain('href="/agents/claude"');
+    expect(body).toContain('href="/therapies/rubber-duck-sessions"');
+  });
+});
