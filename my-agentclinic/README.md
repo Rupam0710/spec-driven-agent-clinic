@@ -9,6 +9,7 @@ mission, tech stack, roadmap, and per-phase requirements.
 
 - **TypeScript** (strict) on **Node.js** (v18+)
 - **[Hono](https://hono.dev/)** web framework with server-rendered **JSX**
+- **[Pico CSS](https://picocss.com/)** (classless, via CDN) for base styling
 - **tsx** for the dev loop, **tsc** for type-check/build, **vitest** for tests
 
 ## Getting started
@@ -36,6 +37,16 @@ Then open <http://localhost:3000/> — you should see the **AgentClinic** home p
 
 - `GET /` — server-rendered home page (HTML)
 - `GET /health` — liveness check, returns `{ "status": "ok" }`
+- `GET /agents` · `GET /agents/:id` — agents checked in, and each agent's
+  diagnosed ailments
+- `GET /ailments` · `GET /ailments/:id` — diagnosable conditions, with the
+  therapies that treat them and the agents affected
+- `GET /therapies` · `GET /therapies/:id` — treatments on offer, and the
+  ailments each one treats
+
+The agents, ailments, and therapies sections are cross-linked (agent → ailment →
+therapy and back). Data is in-memory static seed data for now (`src/data/seed.ts`);
+persistence arrives in a later phase.
 
 ## Build
 

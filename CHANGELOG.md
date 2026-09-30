@@ -2,9 +2,13 @@
 
 All notable changes to this project, grouped by date. Newest first.
 
-<!-- changelog-cursor: cf64c3b9a8cf50a76021294ce23d10d8a5e2335f -->
+<!-- changelog-cursor: fe6ddba1a6d5db7ea9c7c10f044b5b8ec7bb8ce9 -->
 
 ## 2026-09-30
+- Apply Phase 2 review polish: teal accent, doctype, global 404 (`fe6ddba`)
+- Implement Phase 2: agents, ailments & therapies with Pico CSS (`e11d25f`)
+- Add Phase 2 feature spec (agents, ailments, therapies) with Pico CSS (`eadd337`)
+- Add changelog and changelog skill (`07f9482`)
 - Combine roadmap phases 2-5 into a new Phase 2 (`cf64c3b`)
 - Make responsive design a product-wide baseline (`32cff5f`)
 - Adopt Vitest as Phase 1 validation mechanism (`34db6ad`)

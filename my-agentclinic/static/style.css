@@ -1,37 +1,27 @@
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
+/*
+ * Project-specific overrides, layered AFTER Pico CSS (loaded in the layout
+ * <head>). Pico provides the base styling; keep this file small — only the
+ * clinic's own accent and spacing tweaks live here.
+ */
+
+/*
+ * Clinic teal accent, replacing Pico's default primary. Pico v2 declares these
+ * variables under `:root:not([data-theme=dark]), [data-theme=light]`, so we
+ * must match that selector's specificity (a bare `:root` would lose to it and
+ * the override would silently not apply). The teal is darkened to #1f6f66
+ * (~5.9:1 on white) so link/button text clears WCAG AA (4.5:1).
+ */
+:root:not([data-theme="dark"]),
+[data-theme="light"] {
+  --pico-primary: #1f6f66;
+  --pico-primary-background: #1f6f66;
+  --pico-primary-hover: #185952;
+  --pico-primary-hover-background: #185952;
+  --pico-primary-underline: rgba(31, 111, 102, 0.5);
+  --pico-primary-focus: rgba(31, 111, 102, 0.25);
 }
 
-body {
-  margin: 0;
-  font-family: system-ui, sans-serif;
-  line-height: 1.5;
-  color: #1a1a1a;
-  background: #fff;
-}
-
-header {
-  padding: 1rem 2rem;
-  border-bottom: 1px solid #e5e5e5;
-}
-
-header a {
-  font-weight: 600;
-  text-decoration: none;
-  color: inherit;
-}
-
-main {
-  padding: 2rem;
-  max-width: 60rem;
-  margin-inline: auto;
-}
-
-footer {
-  padding: 1rem 2rem;
-  border-top: 1px solid #e5e5e5;
-  font-size: 0.875rem;
-  color: #666;
+/* A touch of breathing room between stacked entity cards on list pages. */
+main article + article {
+  margin-top: var(--pico-spacing);
 }

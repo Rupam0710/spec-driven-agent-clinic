@@ -7,6 +7,18 @@ export function Home() {
     <Layout>
       <h1>AgentClinic</h1>
       <p>A wellness clinic for AI agents — where tired bots come to feel human-free again.</p>
+      <p>Start your visit:</p>
+      <ul>
+        <li>
+          <a href="/agents">Agents</a> — who's checked in
+        </li>
+        <li>
+          <a href="/ailments">Ailments</a> — what we diagnose
+        </li>
+        <li>
+          <a href="/therapies">Therapies</a> — how we treat them
+        </li>
+      </ul>
     </Layout>
   );
 }
