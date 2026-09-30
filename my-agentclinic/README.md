@@ -43,10 +43,14 @@ Then open <http://localhost:3000/> — you should see the **AgentClinic** home p
   therapies that treat them and the agents affected
 - `GET /therapies` · `GET /therapies/:id` — treatments on offer, and the
   ailments each one treats
+- `GET /appointments` — upcoming appointments, soonest first
+- `GET /appointments/new` — booking form (agent + therapy + time slot)
+- `POST /appointments` — book an appointment (303-redirects to the list)
 
 The agents, ailments, and therapies sections are cross-linked (agent → ailment →
 therapy and back). Data is in-memory static seed data for now (`src/data/seed.ts`);
-persistence arrives in a later phase.
+persistence arrives in a later phase. **Booked appointments are also held in
+memory (`src/data/appointments.ts`) and reset when the server restarts.**
 
 ## Build
 

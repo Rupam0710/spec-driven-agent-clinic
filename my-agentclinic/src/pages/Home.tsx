@@ -18,7 +18,15 @@ export function Home() {
         <li>
           <a href="/therapies">Therapies</a> — how we treat them
         </li>
+        <li>
+          <a href="/appointments">Appointments</a> — book your way to relief
+        </li>
       </ul>
+      <p>
+        <a href="/appointments/new" role="button">
+          Book an appointment
+        </a>
+      </p>
     </Layout>
   );
 }

@@ -22,6 +22,9 @@ export const Header: FC = () => (
         <li>
           <a href="/therapies">Therapies</a>
         </li>
+        <li>
+          <a href="/appointments">Appointments</a>
+        </li>
       </ul>
     </nav>
   </header>
