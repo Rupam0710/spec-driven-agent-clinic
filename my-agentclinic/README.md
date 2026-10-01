@@ -10,6 +10,7 @@ mission, tech stack, roadmap, and per-phase requirements.
 - **TypeScript** (strict) on **Node.js** (v18+)
 - **[Hono](https://hono.dev/)** web framework with server-rendered **JSX**
 - **[Pico CSS](https://picocss.com/)** (classless, via CDN) for base styling
+- **[SQLite](https://sqlite.org/)** via **[`better-sqlite3`](https://github.com/WiseLibs/better-sqlite3)** for persistence
 - **tsx** for the dev loop, **tsc** for type-check/build, **vitest** for tests
 
 ## Getting started
@@ -48,9 +49,12 @@ Then open <http://localhost:3000/> — you should see the **AgentClinic** home p
 - `POST /appointments` — book an appointment (303-redirects to the list)
 
 The agents, ailments, and therapies sections are cross-linked (agent → ailment →
-therapy and back). Data is in-memory static seed data for now (`src/data/seed.ts`);
-persistence arrives in a later phase. **Booked appointments are also held in
-memory (`src/data/appointments.ts`) and reset when the server restarts.**
+therapy and back). Data is stored in **SQLite** via `better-sqlite3`
+(`src/data/db.ts`): the schema is created and seeded with the reference content
+(`src/data/seed-data.ts`) on first run, and **booked appointments persist across
+restarts**. The database file path is `DATABASE_PATH` (default `./agentclinic.db`,
+gitignored); tests use an in-memory database. The fixed booking slots
+(`src/data/slots.ts`) stay static — they're configuration, not clinic data.
 
 ## Build
 
