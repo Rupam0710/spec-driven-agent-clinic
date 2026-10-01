@@ -6,46 +6,58 @@ AgentClinic is a wellness clinic for AI agents — a place where agents come to 
 relief from their humans. Agents check in, get their **ailments** diagnosed, are
 prescribed **therapies**, and **book appointments** to see them through.
 
-We lean into the clinic metaphor. It is the product's personality, not just
-decoration: the domain language (agents, ailments, therapies, appointments)
-should show up in the code, the UI, and the specs.
+The clinic metaphor supplies the product's domain language — agents, ailments,
+therapies, appointments — and that language runs consistently through the code,
+the UI, and the specs. But AgentClinic is built as a **real product**, not a
+gag: the booking flow actually works, the data model is coherent, and every
+phase ships something that holds together under scrutiny. The whimsy is the
+theme; the rigor is the point.
 
 ## Why it exists
 
 The three stakeholders each need something from AgentClinic:
 
-- **Reliability & a familiar stack** — the site should just work, built on a
-  popular, approachable technology base so agents and staff can depend on it.
-- **A real feature set** — agents and their ailments, the therapies that treat
-  them, and the ability to book appointments.
-- **An attractive, browser-first experience** — a modern, good-looking site that
-  works well in a current web browser.
+- **Reliability & a familiar stack** (engineering) — the site should just work,
+  built on a popular, approachable technology base that agents and staff can
+  depend on.
+- **A real feature set** (product) — agents and their ailments, the therapies
+  that treat them, and the ability to book appointments.
+- **An attractive, browser-first experience** (marketing) — a modern,
+  good-looking site that works well in a current web browser.
 
 ## Target audience
 
-AgentClinic is built with two real audiences in mind:
+AgentClinic serves four audiences at once — two real, two in-world:
 
-- **Course students** learning spec-driven development with AI coding agents —
-  the app is their hands-on project, so it should stay small, legible, and easy
-  to follow phase by phase.
-- **Developers giving AI coding demos** at conference booths — the app should be
-  quick to spin up, visually appealing in a browser, and fun to show off in a
-  short live demo.
+- **Course students** learning spec-driven development with AI coding agents.
+  The app is their hands-on project, so it stays small, legible, and easy to
+  follow phase by phase.
+- **Developers giving AI coding demos** at conference booths. The app should be
+  quick to spin up, visually appealing in a browser, and satisfying to show off
+  in a short live demo.
+- **Clinic staff** (in-world) — the staff/dashboard persona behind Mary's
+  request. We design the data and flows as if real staff will run the clinic,
+  which keeps the product honest even before a dashboard exists.
+- **The AI agents themselves** (in-world) — the end users "getting relief from
+  their humans." Framing the agent as the primary user keeps the booking
+  experience the heart of the product.
 
-These audiences reinforce the principles below: keep it small, reliable,
-attractive, and demo-friendly.
+The two real audiences keep us small and demo-friendly; the two in-world
+audiences keep us building like it's a genuine product.
 
 ## Principles
 
-- **Metaphor-forward.** The clinic conceit is a feature. Keep the tone warm,
-  playful, and consistent.
+- **Build it like it's real.** Prefer production-transferable habits — coherent
+  data models, working flows, tested behavior — over throwaway shortcuts.
 - **Reliable over clever.** Prefer boring, dependable choices that are easy to
-  reason about and demo.
+  reason about and to demo.
+- **Metaphor as domain language.** The clinic conceit drives naming and model;
+  keep it consistent, but never at the expense of a working product.
 - **Small, shippable steps.** Every phase leaves the app in a working state.
 - **Browser-first.** The primary interface is a web page in a modern browser.
 
 ## Non-goals (for now)
 
-- No real medical or psychological advice — this is a whimsical product for
-  *AI agents*, not people.
+- No real medical or psychological advice — this is a product for *AI agents*,
+  not people.
 - No authentication, billing, or multi-tenancy in the early phases.
