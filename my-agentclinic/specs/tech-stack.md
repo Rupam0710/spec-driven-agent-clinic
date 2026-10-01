@@ -51,13 +51,20 @@ than this project needs). We chose Hono for its clarity and TS ergonomics.
 - **SQLite** for storage. A single-file, zero-configuration database that is
   reliable, dependency-light, and trivial to spin up — a great fit for course
   students and quick conference-booth demos.
-- Introduced once the shape of the data is stable; the early "walking skeleton"
-  phases can run before storage is wired in.
-- **Status (post-MVP):** the data shape is now stable — agents, ailments,
-  therapies, and appointments are all modeled and shipped. That trigger condition
-  is **met**, and since booked appointments currently reset on every restart,
-  wiring up SQLite is the **recommended next step** (ahead of the dashboard and
-  the design-polish pass).
+- **Driver: [`better-sqlite3`](https://github.com/WiseLibs/better-sqlite3).**
+  Chosen for the "reliable over clever" reason — it is **synchronous**, so the
+  existing data accessors kept their signatures and the server-rendered pages
+  needed no changes, and it ships prebuilt binaries so `npm install` stays
+  turnkey. Alternatives (the built-in `node:sqlite`, async `node-sqlite3`) were
+  passed over: the former is still experimental and needs a newer Node; the
+  latter would have forced an async rewrite of every page.
+- **Status (shipped — Phase 4):** SQLite is live. One shared connection
+  (`src/data/db.ts`) creates the schema and seeds the reference data — agents,
+  ailments, therapies, and their relationships — on first run, idempotently.
+  Booked **appointments now persist** across restarts. The database file path is
+  `DATABASE_PATH` (default `./agentclinic.db`, gitignored). The fixed booking
+  **slots stay static** (`src/data/slots.ts`) — they are a configured set, not
+  clinic data, so they are not stored in the database.
 
 ## Testing
 
@@ -66,8 +73,10 @@ than this project needs). We chose Hono for its clarity and TS ergonomics.
   key content); feature phases add integration tests for their behavior (e.g.
   booking an appointment returns a 303 and the appointment appears in the list).
 - Tests should run fast, with no external services — in keeping with the
-  single-process, zero-config ethos. Once SQLite lands, tests run against an
-  in-memory or temp-file database so they stay isolated and repeatable.
+  single-process, zero-config ethos. Now that SQLite has landed, tests run
+  against an in-memory database (`DATABASE_PATH=":memory:"`, set in
+  `vitest.config.ts`) so they stay isolated and repeatable, with a dedicated
+  temp-file test covering restart persistence.
 
 ## Deployment
 

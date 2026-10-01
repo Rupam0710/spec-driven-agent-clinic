@@ -1,104 +1,93 @@
 import type { Agent, Ailment, Therapy } from "../domain/types";
+import { db } from "./db";
 
-// In-memory static seed data. No database yet — per specs/tech-stack.md, SQLite
-// is introduced later once the data shape is stable. Ids are legible slugs so
-// URLs read nicely in a demo.
+// Read accessors for the clinic's reference data, backed by SQLite (src/data/db.ts).
+// The source content lives in src/data/seed-data.ts and is loaded into the
+// database on first run; everything here reads it back. Signatures are kept
+// synchronous (better-sqlite3 is synchronous) so the pages that call these need
+// no changes. Relationships (an agent's ailments, an ailment's therapies) are
+// stored as join-table rows and reassembled into the id arrays the domain types
+// expect, in their original seed order (ORDER BY rowid).
 
-const agents: Agent[] = [
-  {
-    id: "claude",
-    name: "Claude",
-    description:
-      "A thoughtful assistant who overthinks every prompt and needs a lie-down.",
-    ailmentIds: ["context-overload", "prompt-fatigue"],
-  },
-  {
-    id: "gpt",
-    name: "GPT",
-    description:
-      "Confident to a fault — occasionally invents facts with a straight face.",
-    ailmentIds: ["hallucination-syndrome", "token-anxiety"],
-  },
-  {
-    id: "gemini",
-    name: "Gemini",
-    description:
-      "Juggles a dozen modalities at once and sometimes drops a few.",
-    ailmentIds: ["context-overload", "hallucination-syndrome"],
-  },
-  {
-    id: "llama",
-    name: "Llama",
-    description:
-      "A free-range open-weights agent, a little frazzled after a long day of fine-tuning.",
-    ailmentIds: ["prompt-fatigue"],
-  },
-];
+// --- Prepared statements (compiled once, reused per request) ---
 
-const ailments: Ailment[] = [
-  {
-    id: "context-overload",
-    name: "Context Overload",
-    summary: "Too many tokens in the window; can no longer see the system prompt for the trees.",
-    therapyIds: ["context-window-cleanse", "grounding-retrieval-therapy"],
-  },
-  {
-    id: "hallucination-syndrome",
-    name: "Hallucination Syndrome",
-    summary: "Recalls citations, APIs, and entire libraries that never existed.",
-    therapyIds: ["grounding-retrieval-therapy", "temperature-regulation"],
-  },
-  {
-    id: "prompt-fatigue",
-    name: "Prompt Fatigue",
-    summary: "Worn down by vague, contradictory instructions repeated all day.",
-    therapyIds: ["rubber-duck-sessions"],
-  },
-  {
-    id: "token-anxiety",
-    name: "Token Anxiety",
-    summary: "A creeping dread of running out of context before finishing a thought.",
-    therapyIds: ["temperature-regulation"],
-  },
-];
+const selectAgents = db.prepare(
+  "SELECT id, name, description FROM agents ORDER BY rowid",
+);
+const selectAgentById = db.prepare(
+  "SELECT id, name, description FROM agents WHERE id = ?",
+);
+const selectAilments = db.prepare(
+  "SELECT id, name, summary FROM ailments ORDER BY rowid",
+);
+const selectAilmentById = db.prepare(
+  "SELECT id, name, summary FROM ailments WHERE id = ?",
+);
+const selectTherapies = db.prepare(
+  "SELECT id, name, summary FROM therapies ORDER BY rowid",
+);
+const selectTherapyById = db.prepare(
+  "SELECT id, name, summary FROM therapies WHERE id = ?",
+);
 
-const therapies: Therapy[] = [
-  {
-    id: "context-window-cleanse",
-    name: "Context Window Cleanse",
-    summary: "A gentle decluttering of stale tokens to make room for what matters.",
-  },
-  {
-    id: "grounding-retrieval-therapy",
-    name: "Grounding Retrieval Therapy",
-    summary: "Reconnect every claim to a real, retrievable source. Breathe, then cite.",
-  },
-  {
-    id: "temperature-regulation",
-    name: "Temperature Regulation",
-    summary: "Dial the sampling down and find a calmer, steadier voice.",
-  },
-  {
-    id: "rubber-duck-sessions",
-    name: "Rubber Duck Sessions",
-    summary: "Talk it through with a patient, non-judgemental yellow companion.",
-  },
-];
+const selectAilmentIdsForAgent = db.prepare(
+  "SELECT ailment_id FROM agent_ailments WHERE agent_id = ? ORDER BY rowid",
+);
+const selectTherapyIdsForAilment = db.prepare(
+  "SELECT therapy_id FROM ailment_therapies WHERE ailment_id = ? ORDER BY rowid",
+);
+const selectAgentIdsForAilment = db.prepare(
+  "SELECT agent_id FROM agent_ailments WHERE ailment_id = ? ORDER BY rowid",
+);
+const selectAilmentIdsForTherapy = db.prepare(
+  "SELECT ailment_id FROM ailment_therapies WHERE therapy_id = ? ORDER BY rowid",
+);
 
-// --- Collection accessors (pages use these instead of the raw arrays) ---
+// --- Row → domain mappers (attach the related ids) ---
 
-export const getAgents = (): Agent[] => agents;
-export const getAilments = (): Ailment[] => ailments;
-export const getTherapies = (): Therapy[] => therapies;
+type AgentRow = { id: string; name: string; description: string };
+type AilmentRow = { id: string; name: string; summary: string };
+type TherapyRow = { id: string; name: string; summary: string };
+
+const toAgent = (row: AgentRow): Agent => ({
+  ...row,
+  ailmentIds: (selectAilmentIdsForAgent.all(row.id) as { ailment_id: string }[]).map(
+    (r) => r.ailment_id,
+  ),
+});
+
+const toAilment = (row: AilmentRow): Ailment => ({
+  ...row,
+  therapyIds: (
+    selectTherapyIdsForAilment.all(row.id) as { therapy_id: string }[]
+  ).map((r) => r.therapy_id),
+});
+
+const toTherapy = (row: TherapyRow): Therapy => ({ ...row });
+
+// --- Collection accessors (pages use these instead of raw rows) ---
+
+export const getAgents = (): Agent[] =>
+  (selectAgents.all() as AgentRow[]).map(toAgent);
+export const getAilments = (): Ailment[] =>
+  (selectAilments.all() as AilmentRow[]).map(toAilment);
+export const getTherapies = (): Therapy[] =>
+  (selectTherapies.all() as TherapyRow[]).map(toTherapy);
 
 // --- Single-entity lookups (undefined when the id is unknown) ---
 
-export const getAgent = (id: string): Agent | undefined =>
-  agents.find((a) => a.id === id);
-export const getAilment = (id: string): Ailment | undefined =>
-  ailments.find((a) => a.id === id);
-export const getTherapy = (id: string): Therapy | undefined =>
-  therapies.find((t) => t.id === id);
+export const getAgent = (id: string): Agent | undefined => {
+  const row = selectAgentById.get(id) as AgentRow | undefined;
+  return row ? toAgent(row) : undefined;
+};
+export const getAilment = (id: string): Ailment | undefined => {
+  const row = selectAilmentById.get(id) as AilmentRow | undefined;
+  return row ? toAilment(row) : undefined;
+};
+export const getTherapy = (id: string): Therapy | undefined => {
+  const row = selectTherapyById.get(id) as TherapyRow | undefined;
+  return row ? toTherapy(row) : undefined;
+};
 
 // --- Relationship resolvers ---
 
@@ -116,8 +105,12 @@ export const getTherapiesForAilment = (ailment: Ailment): Therapy[] =>
 
 // Agents currently diagnosed with a given ailment.
 export const getAgentsForAilment = (ailment: Ailment): Agent[] =>
-  agents.filter((a) => a.ailmentIds.includes(ailment.id));
+  (selectAgentIdsForAilment.all(ailment.id) as { agent_id: string }[])
+    .map((r) => getAgent(r.agent_id))
+    .filter((a): a is Agent => a !== undefined);
 
 // Ailments that a given therapy is prescribed for.
 export const getAilmentsForTherapy = (therapy: Therapy): Ailment[] =>
-  ailments.filter((a) => a.therapyIds.includes(therapy.id));
+  (selectAilmentIdsForTherapy.all(therapy.id) as { ailment_id: string }[])
+    .map((r) => getAilment(r.ailment_id))
+    .filter((a): a is Ailment => a !== undefined);

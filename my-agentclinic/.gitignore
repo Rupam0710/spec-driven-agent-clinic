@@ -2,6 +2,14 @@
 /out-tsc
 /dist
 
+# Local SQLite database (created & seeded on first run) and its WAL sidecars.
+/agentclinic.db
+/agentclinic.db-shm
+/agentclinic.db-wal
+*.db
+*.db-shm
+*.db-wal
+
 /node_modules
 npm-debug.log*
 yarn-debug.log*

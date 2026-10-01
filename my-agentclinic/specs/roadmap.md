@@ -35,15 +35,18 @@ the therapy that treats each ailment._ **Done.**
 _Goal: agents can book their way to relief._ **Done — this completes the MVP.**
 Appointments are held in memory (reset on restart); real persistence is below.
 
-## Phase 4 — Persistence (SQLite)
+## Phase 4 — Persistence (SQLite) ✅
 
 - Introduce SQLite (single local file) and move agents, ailments, therapies, and
   appointments off in-memory seed data.
 - Seed the database on first run; appointments survive a restart.
 - Tests run against an in-memory / temp-file database.
 
-_Goal: data outlives the process. The highest-value next step — the data shape is
-stable and booked appointments currently reset on restart (see `tech-stack.md`)._
+_Goal: data outlives the process._ **Done.** Uses `better-sqlite3` (synchronous,
+so the data accessors kept their signatures). Reference data is seeded once on
+first run; booked appointments now persist across restarts. Fixed slots stay
+static (not clinic data). Tests run against an in-memory database, with a
+temp-file test proving appointments survive a restart.
 
 ## Phase 5 — Booking polish
 
