@@ -63,4 +63,44 @@ describe("Persistence (appointments survive a restart)", () => {
     // file must not seed them again.
     expect(getAgents()).toHaveLength(4);
   });
+
+  it("keeps a posted review across a restart", async () => {
+    // Post a review, close the connection to flush to disk...
+    vi.resetModules();
+    {
+      const { db } = await import("./data/db");
+      const { addReview, listReviewsForTherapy } = await import(
+        "./data/reviews"
+      );
+      expect(listReviewsForTherapy("rubber-duck-sessions")).toHaveLength(0);
+      addReview({
+        agentId: "claude",
+        therapyId: "rubber-duck-sessions",
+        rating: 5,
+        note: "Quacked my bug wide open.",
+      });
+      expect(listReviewsForTherapy("rubber-duck-sessions")).toHaveLength(1);
+      db.close();
+    }
+
+    // ...then reopen the same file and confirm the review is still there.
+    vi.resetModules();
+    {
+      const { listReviewsForTherapy, getRatingSummary } = await import(
+        "./data/reviews"
+      );
+      const reviews = listReviewsForTherapy("rubber-duck-sessions");
+      expect(reviews).toHaveLength(1);
+      expect(reviews[0]).toMatchObject({
+        agentId: "claude",
+        therapyId: "rubber-duck-sessions",
+        rating: 5,
+        note: "Quacked my bug wide open.",
+      });
+      expect(getRatingSummary("rubber-duck-sessions")).toMatchObject({
+        avg: 5,
+        n: 1,
+      });
+    }
+  });
 });
