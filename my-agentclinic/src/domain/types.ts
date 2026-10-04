@@ -53,3 +53,18 @@ export interface Appointment {
   therapyId: string;
   slotId: string;
 }
+
+// A public review an agent leaves for a therapy: a 1–5 rating and a note.
+// Created at runtime and persisted (src/data/reviews.ts); surfaced on the
+// therapy's page as in-world social proof. `createdAt` is an ISO string used to
+// order reviews newest-first.
+export interface Review {
+  id: string;
+  agentId: string;
+  therapyId: string;
+  /** Integer 1–5. */
+  rating: number;
+  /** Public, free-text note. */
+  note: string;
+  createdAt: string;
+}

@@ -148,3 +148,77 @@ describe("Appointments", () => {
     expect(body).toContain('href="/therapies/rubber-duck-sessions"');
   });
 });
+
+// Reviews share the module-level database, so these run in order: the form,
+// empty state, and invalid cases precede the one successful review.
+describe("Reviews", () => {
+  const post = (therapyId: string, fields: Record<string, string>) =>
+    app.request(`/therapies/${therapyId}/reviews`, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams(fields).toString(),
+    });
+
+  it("GET /therapies/:id/reviews/new renders the form with agent + rating options", async () => {
+    const res = await app.request("/therapies/rubber-duck-sessions/reviews/new");
+    expect(res.status).toBe(200);
+    const body = await res.text();
+    expect(body).toContain('action="/therapies/rubber-duck-sessions/reviews"');
+    expect(body).toContain("Claude"); // an agent option
+    expect(body).toContain('name="rating"');
+  });
+
+  it("GET /therapies/:id/reviews/new returns 404 for an unknown therapy", async () => {
+    const res = await app.request("/therapies/nope/reviews/new");
+    expect(res.status).toBe(404);
+  });
+
+  it("shows the empty state on a therapy with no reviews", async () => {
+    const res = await app.request("/therapies/rubber-duck-sessions");
+    expect(res.status).toBe(200);
+    expect(await res.text()).toContain("No reviews yet");
+  });
+
+  it("rejects an invalid review (empty note) with 400 and adds nothing", async () => {
+    const res = await post("rubber-duck-sessions", {
+      agentId: "claude",
+      rating: "5",
+      note: "   ",
+    });
+    expect(res.status).toBe(400);
+
+    const page = await app.request("/therapies/rubber-duck-sessions");
+    expect(await page.text()).toContain("No reviews yet");
+  });
+
+  it("rejects an out-of-range rating with 400", async () => {
+    const res = await post("rubber-duck-sessions", {
+      agentId: "claude",
+      rating: "7",
+      note: "Loved it",
+    });
+    expect(res.status).toBe(400);
+  });
+
+  it("posts a valid review (303 redirect) and surfaces it with an average", async () => {
+    const res = await post("rubber-duck-sessions", {
+      agentId: "claude",
+      rating: "5",
+      note: "Quacked my bug wide open.",
+    });
+    expect(res.status).toBe(303);
+    expect(res.headers.get("location")).toBe("/therapies/rubber-duck-sessions");
+
+    const page = await app.request("/therapies/rubber-duck-sessions");
+    const body = await page.text();
+    expect(body).toContain("Quacked my bug wide open.");
+    expect(body).toContain('href="/agents/claude"');
+    expect(body).toContain("5.0 / 5");
+  });
+
+  it("shows a therapy's average rating on the /therapies index", async () => {
+    const res = await app.request("/therapies");
+    expect(res.status).toBe(200);
+    expect(await res.text()).toContain("5.0 / 5");
+  });
+});
