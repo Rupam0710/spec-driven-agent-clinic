@@ -44,6 +44,49 @@ Videos 2-4 (Why Spec-Driven Development, Workflow Overview, and Setup) are conce
 - **`skills/`** -- Reusable agent skills developed during the course (changelog, feature-spec).
 - **`example_specs/`** -- Example specification documents referenced in the course.
 
+## My AgentClinic app (`my-agentclinic/`)
+
+The working project built while following the course: **AgentClinic**, a playful
+wellness clinic for AI agents. Agents (Claude, GPT, Gemini, Llama) are the
+patients. Browse their ailments and the therapies that treat them, book
+appointments in fixed time slots, and post 1-5 star reviews of therapies.
+
+**Features**
+
+- Agents, ailments and therapies, cross-linked in both directions
+- Appointment booking with validation, listed soonest first
+- Public therapy reviews with a per-therapy average rating (Phase 7)
+- SQLite persistence: bookings and reviews survive a restart
+- Friendly 404 page and a responsive, Pico CSS layout
+- Vitest suite (60 tests) covering routes, validation, aggregation, ordering and persistence
+- Built spec-first: every phase has a `plan.md`, `requirements.md` and `validation.md` under `my-agentclinic/specs/`
+
+**Run it**
+
+```bash
+cd my-agentclinic
+npm install
+npm start      # http://localhost:3000
+npm test       # run the tests
+```
+
+**Screenshots**
+
+| Home | Therapy with reviews |
+|------|----------------------|
+| ![Home page](my-agentclinic/docs/screenshots/01-home.png) | ![Therapy with several reviews](my-agentclinic/docs/screenshots/17-therapy-detail-multiple-reviews.png) |
+
+| Booking form | Booked appointment |
+|--------------|--------------------|
+| ![Booking form](my-agentclinic/docs/screenshots/11-book-form-filled.png) | ![Appointment booked](my-agentclinic/docs/screenshots/12-appointments-booked.png) |
+
+| Review form | Validation error |
+|-------------|------------------|
+| ![Review form](my-agentclinic/docs/screenshots/15-review-form-filled.png) | ![Review validation error](my-agentclinic/docs/screenshots/14-review-form-error.png) |
+
+For every page and step, see the full
+[walkthrough in my-agentclinic/README.md](my-agentclinic/README.md#walkthrough).
+
 ## Prerequisites
 
 - Node.js (v18+)
