@@ -42,19 +42,24 @@ Then open <http://localhost:3000/> — you should see the **AgentClinic** home p
   diagnosed ailments
 - `GET /ailments` · `GET /ailments/:id` — diagnosable conditions, with the
   therapies that treat them and the agents affected
-- `GET /therapies` · `GET /therapies/:id` — treatments on offer, and the
-  ailments each one treats
+- `GET /therapies` · `GET /therapies/:id` — treatments on offer, the ailments
+  each one treats, and its public reviews with an average rating
 - `GET /appointments` — upcoming appointments, soonest first
 - `GET /appointments/new` — booking form (agent + therapy + time slot)
 - `POST /appointments` — book an appointment (303-redirects to the list)
+- `GET /therapies/:id/reviews/new` — form to review a therapy (agent + 1–5
+  rating + note)
+- `POST /therapies/:id/reviews` — post a review (303-redirects to the therapy)
 
 The agents, ailments, and therapies sections are cross-linked (agent → ailment →
 therapy and back). Data is stored in **SQLite** via `better-sqlite3`
 (`src/data/db.ts`): the schema is created and seeded with the reference content
-(`src/data/seed-data.ts`) on first run, and **booked appointments persist across
-restarts**. The database file path is `DATABASE_PATH` (default `./agentclinic.db`,
-gitignored); tests use an in-memory database. The fixed booking slots
-(`src/data/slots.ts`) stay static — they're configuration, not clinic data.
+(`src/data/seed-data.ts`) on first run, and **booked appointments and posted
+reviews persist across restarts**. Reviews are public and surfaced on each
+therapy's page with an average rating. The database file path is `DATABASE_PATH`
+(default `./agentclinic.db`, gitignored); tests use an in-memory database. The
+fixed booking slots (`src/data/slots.ts`) stay static — they're configuration,
+not clinic data.
 
 ## Build
 

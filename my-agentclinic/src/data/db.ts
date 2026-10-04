@@ -65,6 +65,18 @@ function initSchema(): void {
       therapy_id TEXT NOT NULL REFERENCES therapies(id),
       slot_id    TEXT NOT NULL
     );
+
+    -- Public customer reviews: an agent rates a therapy (1–5) and leaves a
+    -- note. Runtime-created and persisted, like appointments; surfaced on the
+    -- therapy's page with an average rating.
+    CREATE TABLE IF NOT EXISTS reviews (
+      id         INTEGER PRIMARY KEY AUTOINCREMENT,
+      agent_id   TEXT NOT NULL REFERENCES agents(id),
+      therapy_id TEXT NOT NULL REFERENCES therapies(id),
+      rating     INTEGER NOT NULL,
+      note       TEXT NOT NULL,
+      created_at TEXT NOT NULL
+    );
   `);
 }
 
